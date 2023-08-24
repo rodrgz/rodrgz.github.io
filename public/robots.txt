@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://rodrgz.github.io/sitemap-index.xml

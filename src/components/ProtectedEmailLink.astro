@@ -1,0 +1,46 @@
+---
+const { label, user, domain, tld, fallbackText } = Astro.props;
+const obfuscatedAddress = fallbackText ?? `${user} [at] ${domain} [dot] ${tld}`;
+---
+
+<button
+  type="button"
+  class="protected-email"
+  data-protected-email
+  data-user={user}
+  data-domain={domain}
+  data-tld={tld}
+  aria-label={`${label} (opens your email client)`}
+>
+  {label}
+</button>
+<noscript>
+  <span class="protected-email-fallback">{label}: {obfuscatedAddress}</span>
+</noscript>
+
+<script is:inline>
+  const initializeProtectedEmails = () => {
+    document.querySelectorAll('[data-protected-email]').forEach((trigger) => {
+      if (!(trigger instanceof HTMLButtonElement) || trigger.dataset.bound === 'true') {
+        return;
+      }
+
+      trigger.dataset.bound = 'true';
+      trigger.addEventListener('click', () => {
+        const { user, domain, tld } = trigger.dataset;
+
+        if (!user || !domain || !tld) {
+          return;
+        }
+
+        window.location.href = `mailto:${user}@${domain}.${tld}`;
+      });
+    });
+  };
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializeProtectedEmails, { once: true });
+  } else {
+    initializeProtectedEmails();
+  }
+</script>

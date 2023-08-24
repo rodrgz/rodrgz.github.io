@@ -1,0 +1,101 @@
+---
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { site } from '../data/site';
+import '../styles/global.css';
+
+const { title, description, currentPath, pageType, publishedTime, ogImage, frontmatter } = Astro.props;
+const toAbsoluteUrl = (value) => (value ? new URL(value, site.url).toString() : undefined);
+const resolvedTitle = title ?? frontmatter?.title;
+const resolvedDescription = description ?? frontmatter?.description;
+const resolvedCurrentPath = currentPath ?? frontmatter?.currentPath;
+const resolvedPageType = pageType ?? frontmatter?.pageType ?? 'website';
+const resolvedPublishedTime = publishedTime ?? frontmatter?.publishedTime;
+const resolvedOgImage = toAbsoluteUrl(ogImage ?? frontmatter?.ogImage ?? site.defaultOgImage);
+const canonicalUrl = new URL(Astro.url.pathname, site.url);
+const metadataTitle = resolvedTitle ?? site.title;
+const pageDescription = resolvedDescription ?? site.description;
+const socialLinks = site.links.flatMap((link) =>
+  'href' in link && link.href.startsWith('http') ? [link.href] : []
+);
+const pageTitle =
+  !resolvedTitle || resolvedTitle === site.title
+    ? site.title
+    : resolvedTitle.endsWith(` - ${site.title}`)
+      ? resolvedTitle
+      : `${resolvedTitle} - ${site.title}`;
+const structuredData =
+  resolvedPageType === 'article'
+    ? {
+        '@context': 'https://schema.org',
+        '@type': 'BlogPosting',
+        headline: metadataTitle,
+        description: pageDescription,
+        url: canonicalUrl.toString(),
+        mainEntityOfPage: canonicalUrl.toString(),
+        inLanguage: site.language,
+        author: {
+          '@type': 'Person',
+          name: site.author,
+          url: site.url,
+        },
+        publisher: {
+          '@type': 'Person',
+          name: site.author,
+          url: site.url,
+        },
+        ...(resolvedPublishedTime
+          ? {
+              datePublished: resolvedPublishedTime,
+              dateModified: resolvedPublishedTime,
+            }
+          : {}),
+        ...(resolvedOgImage ? { image: resolvedOgImage } : {}),
+      }
+    : {
+        '@context': 'https://schema.org',
+        '@type': 'Person',
+        name: site.author,
+        url: site.url,
+        description: site.description,
+          sameAs: socialLinks,
+      };
+---
+
+<!doctype html>
+<html lang={site.language}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="color-scheme" content="light" />
+    <meta name="theme-color" content="#faf4ed" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={pageDescription} />
+    <meta name="author" content={site.author} />
+    <meta property="og:type" content={resolvedPageType} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={pageDescription} />
+    <meta property="og:url" content={canonicalUrl.toString()} />
+    <meta property="og:site_name" content={site.title} />
+    {resolvedPublishedTime && resolvedPageType === 'article' ? (
+      <meta property="article:published_time" content={resolvedPublishedTime} />
+    ) : null}
+    {resolvedOgImage ? <meta property="og:image" content={resolvedOgImage} /> : null}
+    <meta name="twitter:card" content={resolvedOgImage ? 'summary_large_image' : 'summary'} />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={pageDescription} />
+    {site.socialHandle ? <meta name="twitter:site" content={site.socialHandle} /> : null}
+    {site.socialHandle ? <meta name="twitter:creator" content={site.socialHandle} /> : null}
+    {resolvedOgImage ? <meta name="twitter:image" content={resolvedOgImage} /> : null}
+    <link rel="canonical" href={canonicalUrl} />
+    <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">Skip to main content</a>
+    <Header currentPath={resolvedCurrentPath} />
+    <main id="main-content" tabindex="-1">
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>

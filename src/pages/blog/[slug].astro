@@ -1,0 +1,33 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection, getEntry, render } from 'astro:content';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+  return posts
+    .filter((p) => !p.data.draft)
+    .map((p) => ({ params: { slug: p.id }, props: { post: p } }));
+}
+
+const post = Astro.props.post ?? await getEntry('blog', Astro.params.slug);
+if (!post) {
+  return Astro.redirect('/404/');
+}
+
+const { Content } = await render(post);
+const publishedTime = new Date(post.data.date).toISOString();
+---
+
+<BaseLayout
+  title={post.data.title}
+  description={post.data.description}
+  currentPath="/blog/"
+  pageType="article"
+  publishedTime={publishedTime}
+>
+  <article class="container">
+    <h1>{post.data.title}</h1>
+    <time datetime={post.data.date}>{new Date(post.data.date).toISOString().split('T')[0]}</time>
+    <Content />
+  </article>
+</BaseLayout>

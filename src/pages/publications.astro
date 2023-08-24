@@ -1,0 +1,54 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { publications } from '../data/publications';
+---
+
+<BaseLayout
+  title="Publications"
+  description="Research publications in computational mechanics, XFEM, analytical methods, and numerical verification."
+  currentPath="/publications/"
+>
+  <section class="container page">
+    <h1>Publications</h1>
+    <p class="lead">
+      Most of this work comes from my computational mechanics years.
+    </p>
+    {publications.length === 0 ? (
+      <p>No publications available.</p>
+    ) : (
+      <ul class="item-list">
+        {publications.map((p) => (
+          <li class="item">
+            <h2>{p.title}</h2>
+            <p class="meta">{p.authors.join(', ')}</p>
+            <p>
+              {p.venue}
+              {p.volume ? `, ${p.volume}` : ''}
+              {p.issue ? `(${p.issue})` : ''}
+              {p.pages ? `, ${p.pages}` : ''}
+              .
+            </p>
+            <p>{p.description}</p>
+            <div class="link-row">
+              {p.doi ? (
+                <a href={`https://doi.org/${p.doi}`} target="_blank" rel="noopener noreferrer">DOI</a>
+              ) : null}
+              {p.url && !p.doi ? (
+                <a href={p.url} target="_blank" rel="noopener noreferrer">Article</a>
+              ) : null}
+              {p.codeUrl ? (
+                <a href={p.codeUrl} target="_blank" rel="noopener noreferrer">Code</a>
+              ) : null}
+              {p.file ? (
+                <a href={p.file} target="_blank" rel="noopener noreferrer">PDF</a>
+              ) : null}
+            </div>
+            <div class="tag-list">
+              {p.tags.map((tag) => <span class="tag">{tag}</span>)}
+            </div>
+          </li>
+        ))}
+      </ul>
+    )}
+  </section>
+</BaseLayout>

@@ -1,0 +1,40 @@
+---
+import ProtectedEmailLink from './ProtectedEmailLink.astro';
+import { site } from '../data/site';
+---
+
+<footer>
+  <div class="container footer-inner">
+    <div class="footer-copy">
+      <p>© {new Date().getFullYear()} {site.author}.
+      Code: MIT. Content: CC BY-NC-ND 4.0.
+    </div>
+    <nav aria-label="External links">
+      {site.links.map((link) => {
+        if ('kind' in link && link.kind === 'email') {
+          return (
+            <ProtectedEmailLink
+              label={link.label}
+              user={link.user}
+              domain={link.domain}
+              tld={link.tld}
+              fallbackText={link.fallbackText}
+            />
+          );
+        }
+
+        const opensNewTab = link.href.startsWith('http');
+
+        return (
+          <a
+            href={link.href}
+            target={opensNewTab ? '_blank' : undefined}
+            rel={opensNewTab ? 'noopener noreferrer' : undefined}
+          >
+            {link.label}
+          </a>
+        );
+      })}
+    </nav>
+  </div>
+</footer>

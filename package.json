@@ -1,0 +1,17 @@
+{
+  "name": "rodrgz.github.io",
+  "private": true,
+  "license": "(MIT AND CC-BY-NC-ND-4.0)",
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "audit": "npm audit --audit-level=moderate",
+    "verify": "npm run build && npm run audit"
+  },
+  "devDependencies": {
+    "@astrojs/sitemap": "3.7.2",
+    "astro": "6.1.9"
+  }
+}

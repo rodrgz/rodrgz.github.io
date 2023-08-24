@@ -1,0 +1,42 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { projects } from '../data/projects';
+---
+
+<BaseLayout
+  title="Projects"
+  description="Selected projects in software engineering, scientific computing, and developer tooling."
+  currentPath="/projects/"
+>
+  <section class="container page">
+    <h1>Projects</h1>
+    <p class="lead">
+      Selected projects across software engineering, scientific computing, developer tooling and hobbies.
+    </p>
+    {projects.length === 0 ? (
+      <p>No projects yet.</p>
+    ) : (
+      <ul class="item-list">
+        {projects.map((proj) => (
+          <li class="item">
+            <h2>
+              <a href={proj.repoUrl ?? proj.liveUrl ?? '#'} target="_blank" rel="noopener noreferrer">{proj.title}</a>
+            </h2>
+            <p>{proj.summary}</p>
+            <p>{proj.description}</p>
+            <div class="link-row">
+              {proj.repoUrl ? <a href={proj.repoUrl} target="_blank" rel="noopener noreferrer">Repository</a> : null}
+              {proj.liveUrl ? <a href={proj.liveUrl} target="_blank" rel="noopener noreferrer">Live site</a> : null}
+              {proj.publicationUrl ? <a href={proj.publicationUrl} target="_blank" rel="noopener noreferrer">Publication</a> : null}
+            </div>
+            <div class="tag-list">
+              {proj.tags.map((t) => (
+                <span class="tag">{t}</span>
+              ))}
+            </div>
+          </li>
+        ))}
+      </ul>
+    )}
+  </section>
+</BaseLayout>

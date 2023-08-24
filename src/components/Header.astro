@@ -1,0 +1,27 @@
+---
+import { navigation } from '../data/navigation';
+const { currentPath } = Astro.props;
+---
+
+<header>
+  <div class="container header-inner">
+    <a class="site-title" href="/">Erik Rodriguez</a>
+    <nav aria-label="Main navigation">
+      <ul class="nav-list">
+        {navigation.map((item) => (
+          <li class="nav-item">
+            <a
+              href={item.href}
+              class={item.href === currentPath ? 'active' : undefined}
+              aria-current={item.href === currentPath ? 'page' : undefined}
+              target={item.external ? '_blank' : undefined}
+              rel={item.external ? 'noopener noreferrer' : undefined}
+            >
+              {item.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  </div>
+</header>
