@@ -5,7 +5,10 @@ const { currentPath } = Astro.props;
 
 <header>
   <div class="container header-inner">
-    <a class="site-title" href="/">Erik Rodriguez</a>
+    <a class="site-title" href="/">
+      <span class="site-title-mark" aria-hidden="true">&#123λ&#125</span>
+      <span>Erik Rodriguez</span>
+    </a>
     <nav aria-label="Main navigation">
       <ul class="nav-list">
         {navigation.map((item) => (

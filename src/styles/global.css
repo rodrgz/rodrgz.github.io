@@ -123,8 +123,26 @@ a:hover {
 }
 
 .site-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 1.3rem;
   font-weight: 700;
+  line-height: 1;
   white-space: nowrap;
+}
+
+.site-title:hover {
+  color: inherit;
+  text-decoration-color: transparent;
+}
+
+.site-title-mark {
+  display: inline-block;
+  color: var(--rp-iris);
+  font-size: 1.3em;
+  line-height: 1;
+  transform: translateY(-0.085em);
 }
 
 .active {
