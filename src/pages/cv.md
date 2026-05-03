@@ -82,4 +82,5 @@ July 2018 - August 2019, Porto Alegre, Brazil
 
 - Email: erik [at] rodgz [dot] com
 - GitHub: https://github.com/rodrgz/
+- LinkedIn: https://www.linkedin.com/in/erik-rodrgz/
 - ORCID: https://orcid.org/0000-0002-9795-8666

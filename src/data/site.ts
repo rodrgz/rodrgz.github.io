@@ -44,6 +44,7 @@ export const site: SiteConfig = {
       fallbackText: 'erik [at] rodgz [dot] com'
     },
     { label: 'GitHub', href: 'https://github.com/rodrgz' },
+    { label: 'LinkedIn', href: 'https://www.linkedin.com/in/erik-rodrgz/' },
     { label: 'ORCID', href: 'https://orcid.org/0000-0002-9795-8666' }
   ]
 };
